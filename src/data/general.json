@@ -1,0 +1,11 @@
+[{
+    "fields": [ {
+        "name": "featureEmail",
+        "label": "Feature annoucement and marketing emails",
+        "component": "switch-field",
+        "validate": [{
+          "type": "required-validator"
+        }]
+      }
+    ]
+}]

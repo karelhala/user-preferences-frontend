@@ -5,7 +5,8 @@ import { Main, PageHeader, PageHeaderTitle, Skeleton } from '@redhat-cloud-servi
 import { Button, Card, CardBody, Stack, StackItem, Flex, FlexItem, FlexModifiers, CardHeader } from '@patternfly/react-core';
 import FormRender from '@data-driven-forms/react-form-renderer';
 import PropTypes from 'prop-types';
-import { DESCRIPTIVE_CHECKBOX, DescriptiveCheckbox, LOADER, Loader } from '../../SmartComponents/FormComponents';
+import { DESCRIPTIVE_CHECKBOX, DATA_LIST, LOADER, DescriptiveCheckbox, DataListLayout, Loader } from '../../SmartComponents/FormComponents';
+import config from '../../config.json';
 
 const FormButtons = ({ submitting, valid, pristine, onCancel }) => (
     <div>
@@ -29,7 +30,8 @@ FormButtons.propTypes = {
 };
 
 const Email = () => {
-
+    const email = config['email-preference'];
+    console.log(email);
     const [ currentUser, setCurrentUser ] = useState({});
     const [ isLoaded, setLoaded ] = useState(false);
 
@@ -43,7 +45,19 @@ const Email = () => {
     }, []);
 
     const schema = {
-        fields: []
+        fields: [{
+            name: 'email-preferences',
+            component: DATA_LIST,
+            sections: Object.entries(email).map(([ key, schema ]) => ({
+                label: schema?.title,
+                name: key,
+                fields: [{
+                    name: 'featureEmail',
+                    label: 'Some cmp',
+                    component: 'checkbox'
+                }]
+            }))
+        }]
     };
 
     const saveValues = (values) => {
@@ -67,7 +81,7 @@ const Email = () => {
                             <CardBody>
                                 <Flex>
                                     <FlexItem
-                                        className="pref-email_bold"
+                                        className="pref-u-bold"
                                         breakpointMods={ [{ modifier: FlexModifiers['spacer-3xl'] }] }>
                                         Email address
                                     </FlexItem>
@@ -89,12 +103,13 @@ const Email = () => {
                                 <div>Email subscriptions</div>
                                 <div className="pref-email_subheader">Select the cloud.redhat.com emails you want to receive.</div>
                             </CardHeader>
-                            <CardBody>
+                            <CardBody className="pref-email_form">
                                 <FormRender
                                     formFieldsMapper={ {
                                         ...formFieldsMapper,
                                         [DESCRIPTIVE_CHECKBOX]: DescriptiveCheckbox,
-                                        [LOADER]: Loader
+                                        [LOADER]: Loader,
+                                        [DATA_LIST]: DataListLayout
                                     } }
                                     layoutMapper={ layoutMapper }
                                     schema={ schema }
