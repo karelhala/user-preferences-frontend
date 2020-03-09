@@ -9,7 +9,7 @@ class App extends Component {
 
     componentDidMount () {
         insights.chrome.init();
-        insights.chrome.identifyApp('user-preferences');
+        insights.chrome.identifyApp('email');
 
         this.appNav = insights.chrome.on('APP_NAVIGATION', event => this.props.history.push(`/${event.navId}`));
     }

@@ -3,10 +3,16 @@
 
 .pref-email {
   
-  .pref-email_head {
-    font-size: var(--pf-global--FontSize--xl);
-    padding-bottom: 16px;
-  }
+    .pref-email__info {
+        .pref-email__info-head {
+            font-size: var(--pf-global--FontSize--xl);
+            padding-bottom: 16px;
+        }
+
+        .pf-c-card__body .pf-l-flex div:first-of-type {
+            margin-right: 111px;
+        }
+    }
 
   .pref-email_subheader {
     margin-top: 8px;

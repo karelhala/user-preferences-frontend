@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './email.scss';
 import { formFieldsMapper, layoutMapper } from '@data-driven-forms/pf4-component-mapper';
-import { Main, PageHeader, PageHeaderTitle, Skeleton } from '@redhat-cloud-services/frontend-components';
+import { Main, PageHeader, PageHeaderTitle, Skeleton, Section } from '@redhat-cloud-services/frontend-components';
 import { Button, Card, CardBody, Stack, StackItem, Flex, FlexItem, FlexModifiers, CardHeader } from '@patternfly/react-core';
 import FormRender from '@data-driven-forms/react-form-renderer';
 import PropTypes from 'prop-types';
 import { DESCRIPTIVE_CHECKBOX, DATA_LIST, LOADER, DescriptiveCheckbox, DataListLayout, Loader } from '../../SmartComponents/FormComponents';
 import config from '../../config.json';
 
-const FormButtons = ({ submitting, valid, pristine, onCancel }) => (
+const FormButtons = ({ submitting, pristine, onCancel }) => (
     <div>
         <Button
             type="submit"
-            isDisabled={ submitting || !valid }
+            isDisabled={ submitting || pristine }
             style={ { marginRight: 16 } }
             variant="primary">Save</Button>
         <Button
@@ -31,8 +31,12 @@ FormButtons.propTypes = {
 
 const Email = () => {
     const email = config['email-preference'];
-    console.log(email);
     const [ currentUser, setCurrentUser ] = useState({});
+    const [ sections, setSections ] = useState(Object.entries(email).map(([ key, schema ]) => ({
+        label: schema?.title,
+        name: key,
+        fields: schema.fields || []
+    })));
     const [ isLoaded, setLoaded ] = useState(false);
 
     useEffect(() => {
@@ -42,23 +46,25 @@ const Email = () => {
                 setLoaded(true);
             }
         );
+        Object.entries(email).forEach(async ([ key, { localFile } ]) => {
+            let newMapper = [];
+            if (localFile) {
+                newMapper = (await import(`../../${localFile}`)).default;
+            }
+            setSections((sections) => sections.map(section => {
+                if (section.name === key) {
+                    return {
+                        ...section,
+                        fields: newMapper
+                    };
+                }
+
+                return section;
+            }))
+        });
     }, []);
 
-    const schema = {
-        fields: [{
-            name: 'email-preferences',
-            component: DATA_LIST,
-            sections: Object.entries(email).map(([ key, schema ]) => ({
-                label: schema?.title,
-                name: key,
-                fields: [{
-                    name: 'featureEmail',
-                    label: 'Some cmp',
-                    component: 'checkbox'
-                }]
-            }))
-        }]
-    };
+    console.log(sections, 'fff');
 
     const saveValues = (values) => {
         console.log(values);
@@ -76,8 +82,8 @@ const Email = () => {
             <Main className="pref-email">
                 <Stack gutter="md">
                     <StackItem>
-                        <Card>
-                            <CardHeader className="pref-email_head">Your information</CardHeader>
+                        <Card className="pref-email__info">
+                            <CardHeader className="pref-email__email__info-head">Your information</CardHeader>
                             <CardBody>
                                 <Flex>
                                     <FlexItem
@@ -112,7 +118,13 @@ const Email = () => {
                                         [DATA_LIST]: DataListLayout
                                     } }
                                     layoutMapper={ layoutMapper }
-                                    schema={ schema }
+                                    schema={ {
+                                        fields: [{
+                                            name: 'email-preferences',
+                                            component: DATA_LIST,
+                                            sections
+                                        }]
+                                    } }
                                     renderFormButtons={ props => <FormButtons { ...props } onCancel={ cancelEmail } /> }
                                     onSubmit={ saveValues }
                                 />
