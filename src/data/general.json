@@ -1,11 +1,11 @@
 [{
     "fields": [ {
-        "name": "featureEmail",
+        "name": "general.featureEmail",
         "label": "Feature annoucement and marketing emails",
-        "component": "switch-field",
-        "validate": [{
-          "type": "required-validator"
-        }]
+        "component": "descriptiveCheckbox",
+        "initialValue": true,
+        "initializeOnMount": true,
+        "description": "Be notified about known maintenance windows, new features and marketing annoucements for cloud.redhat.com"
       }
     ]
 }]

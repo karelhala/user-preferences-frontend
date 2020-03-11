@@ -3,11 +3,14 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Routes } from './Routes';
+import { register } from './store';
+import { notifications } from '@redhat-cloud-services/frontend-components-notifications';
 import './App.scss';
 
 class App extends Component {
 
     componentDidMount () {
+        register({ notifications });
         insights.chrome.init();
         insights.chrome.identifyApp('email');
 

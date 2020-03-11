@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './email.scss';
+import { useSelector, useDispatch } from 'react-redux';
 import { formFieldsMapper, layoutMapper } from '@data-driven-forms/pf4-component-mapper';
-import { Main, PageHeader, PageHeaderTitle, Skeleton, Section } from '@redhat-cloud-services/frontend-components';
+import { Main, PageHeader, PageHeaderTitle, Skeleton } from '@redhat-cloud-services/frontend-components';
 import { Button, Card, CardBody, Stack, StackItem, Flex, FlexItem, FlexModifiers, CardHeader } from '@patternfly/react-core';
 import FormRender from '@data-driven-forms/react-form-renderer';
 import PropTypes from 'prop-types';
 import { DESCRIPTIVE_CHECKBOX, DATA_LIST, LOADER, DescriptiveCheckbox, DataListLayout, Loader } from '../../SmartComponents/FormComponents';
 import config from '../../config.json';
+import { emailPreferences, register } from '../../store';
+import { getEmailSchema, saveEmailValues } from '../../actions';
 
 const FormButtons = ({ submitting, pristine, onCancel }) => (
     <div>
@@ -18,56 +21,52 @@ const FormButtons = ({ submitting, pristine, onCancel }) => (
         <Button
             variant="link"
             isDisabled={ pristine }
-            onClick={ onCancel }>Cancel</Button>
+            onClick={ onCancel }>
+                Cancel
+        </Button>
     </div>
 );
 
 FormButtons.propTypes = {
     submitting: PropTypes.bool,
     pristine: PropTypes.bool,
-    valid: PropTypes.bool,
-    onCancel: PropTypes.func
+    onCancel: PropTypes.func,
+    initialValues: PropTypes.any
 };
 
 const Email = () => {
     const email = config['email-preference'];
     const [ currentUser, setCurrentUser ] = useState({});
-    const [ sections, setSections ] = useState(Object.entries(email).map(([ key, schema ]) => ({
-        label: schema?.title,
-        name: key,
-        fields: schema.fields || []
-    })));
     const [ isLoaded, setLoaded ] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        register(emailPreferences);
         insights.chrome.auth.getUser().then(
             (data) => {
                 setCurrentUser(data.identity.user);
                 setLoaded(true);
             }
         );
-        Object.entries(email).forEach(async ([ key, { localFile } ]) => {
-            let newMapper = [];
+        Object.entries(email).forEach(async ([ key, { localFile }]) => {
             if (localFile) {
-                newMapper = (await import(`../../${localFile}`)).default;
+                const newMapper = (await import(`../../${localFile}`)).default;
+                dispatch(getEmailSchema({ schema: newMapper, application: key }));
+            } else {
+                dispatch(getEmailSchema({ application: key }));
             }
-            setSections((sections) => sections.map(section => {
-                if (section.name === key) {
-                    return {
-                        ...section,
-                        fields: newMapper
-                    };
-                }
-
-                return section;
-            }))
         });
     }, []);
 
-    console.log(sections, 'fff');
+    const store = useSelector(({ emailPreferences }) => emailPreferences);
 
-    const saveValues = (values) => {
-        console.log(values);
+    // eslint-disable-next-line no-unused-vars
+    const saveValues = ({ general, unsubscribe, ...values }) => {
+        Object.entries(email).forEach(([ application, { localFile, schema }]) => {
+            if (!localFile && !schema) {
+                dispatch(saveEmailValues({ application, values }));
+            }
+        });
     };
 
     const cancelEmail = () => {
@@ -111,6 +110,7 @@ const Email = () => {
                             </CardHeader>
                             <CardBody className="pref-email_form">
                                 <FormRender
+                                    keepDirtyOnReinitialize
                                     formFieldsMapper={ {
                                         ...formFieldsMapper,
                                         [DESCRIPTIVE_CHECKBOX]: DescriptiveCheckbox,
@@ -122,7 +122,11 @@ const Email = () => {
                                         fields: [{
                                             name: 'email-preferences',
                                             component: DATA_LIST,
-                                            sections
+                                            sections: Object.entries(email).map(([ key, schema ]) => ({
+                                                label: schema?.title,
+                                                name: key,
+                                                fields: schema.fields || store?.[key]?.schema || []
+                                            }))
                                         }]
                                     } }
                                     renderFormButtons={ props => <FormButtons { ...props } onCancel={ cancelEmail } /> }
