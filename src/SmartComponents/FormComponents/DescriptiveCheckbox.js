@@ -44,7 +44,7 @@ const DescriptiveCheckbox = ({ name, label, description, isDanger, FieldProvider
 };
 
 DescriptiveCheckbox.propTypes = {
-    FieldProvider: PropTypes.any.apply,
+    FieldProvider: PropTypes.any,
     formOptions: PropTypes.any,
     name: PropTypes.string,
     label: PropTypes.string,
