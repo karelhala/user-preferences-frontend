@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Routes } from './Routes';
 import { register } from './store';
 import { notifications } from '@redhat-cloud-services/frontend-components-notifications';
+import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications/';
 import './App.scss';
 
 class App extends Component {
@@ -12,7 +13,7 @@ class App extends Component {
     componentDidMount () {
         register({ notifications });
         insights.chrome.init();
-        insights.chrome.identifyApp('email');
+        insights.chrome.identifyApp('user-preferences');
 
         this.appNav = insights.chrome.on('APP_NAVIGATION', event => this.props.history.push(`/${event.navId}`));
     }
@@ -23,7 +24,10 @@ class App extends Component {
 
     render () {
         return (
-            <Routes childProps={ this.props } />
+            <Fragment>
+                <NotificationsPortal />
+                <Routes childProps={ this.props } />
+            </Fragment>
         );
     }
 }

@@ -27,6 +27,14 @@ const FormButtons = ({ submitting, pristine, onCancel }) => (
     </div>
 );
 
+const getSchema = (app) => {
+    return !app || !app.loaded ? [{
+        fields: [{
+            component: LOADER
+        }]
+    }] : app?.schema;
+};
+
 FormButtons.propTypes = {
     submitting: PropTypes.bool,
     pristine: PropTypes.bool,
@@ -63,7 +71,7 @@ const Email = () => {
     // eslint-disable-next-line no-unused-vars
     const saveValues = ({ general, unsubscribe, ...values }) => {
         Object.entries(email).forEach(([ application, { localFile, schema }]) => {
-            if (!localFile && !schema) {
+            if (!localFile && !schema && store?.[application]?.schema && Object.keys(store?.[application]?.schema).length > 0) {
                 dispatch(saveEmailValues({ application, values }));
             }
         });
@@ -82,7 +90,7 @@ const Email = () => {
                 <Stack gutter="md">
                     <StackItem>
                         <Card className="pref-email__info">
-                            <CardHeader className="pref-email__email__info-head">Your information</CardHeader>
+                            <CardHeader className="pref-email__info-head">Your information</CardHeader>
                             <CardBody>
                                 <Flex>
                                     <FlexItem
@@ -125,7 +133,7 @@ const Email = () => {
                                             sections: Object.entries(email).map(([ key, schema ]) => ({
                                                 label: schema?.title,
                                                 name: key,
-                                                fields: schema.fields || store?.[key]?.schema || []
+                                                fields: schema.fields || getSchema(store?.[key])
                                             }))
                                         }]
                                     } }

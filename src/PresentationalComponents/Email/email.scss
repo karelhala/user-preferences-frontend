@@ -9,6 +9,10 @@
             padding-bottom: 16px;
         }
 
+        .pf-l-flex > div:first-of-type {
+            margin-left: var(--pf-global--gutter);
+        }
+
         .pf-c-card__body .pf-l-flex div:first-of-type {
             margin-right: 111px;
         }

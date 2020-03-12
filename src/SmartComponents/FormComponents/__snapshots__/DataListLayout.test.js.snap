@@ -45,7 +45,7 @@ exports[`DataListLayout checkbox tests should render correctly 1`] = `
                 "renderForm": [Function],
               }
             }
-            key=".$0"
+            key=".$0-0"
             label="test"
             rowid="simple-item1"
           >
@@ -78,7 +78,7 @@ exports[`DataListLayout checkbox tests should render correctly 1`] = `
                     <DataListCell
                       className="pref-c-title pref-u-bold"
                       isFilled={false}
-                      key="title"
+                      key="0-title"
                     >
                       <div
                         className="pf-c-data-list__cell pf-m-no-fill pref-c-title pref-u-bold"

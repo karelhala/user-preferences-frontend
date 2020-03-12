@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import {
     DataList,
     DataListItem,
@@ -22,7 +22,7 @@ class DataListRow extends Component {
         const { hasError } = this.state;
         return <DataListItemRow>
             <DataListItemCells dataListCells={ [
-                <DataListCell isFilled={ false } className="pref-c-title pref-u-bold" key="title">
+                <DataListCell isFilled={ false } className="pref-c-title pref-u-bold" key={ `${fieldsKey}-title` }>
                     { fieldsKey === 0 ? label : '' }
                 </DataListCell>,
                 <DataListCell isFilled key={ `${fieldsKey}-content` }>
@@ -37,7 +37,7 @@ class DataListRow extends Component {
 }
 
 DataListRow.propTypes = {
-    fieldsKey: PropTypes.string,
+    fieldsKey: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
     fields: PropTypes.array,
     FieldProvider: PropTypes.any,
     formOptions: PropTypes.any,
@@ -53,17 +53,15 @@ const DataListLayout = ({ sections, label, name, FormSpyProvider, FieldProvider,
         {sections.map(({ label, fields }, key) => {
             const actualFields = Array.isArray(fields) ? fields : [ fields ];
             return (
-                actualFields.length === 0 ? <Fragment /> : <DataListItem name={ name } key={ key } aria-labelledby="simple-item1">
-                    {actualFields.map(({ fields: fieldsToRender }, fieldsKey) => {
-                        return (
-                            <DataListRow key={ fieldsKey }
-                                fieldsKey={ fieldsKey }
-                                label={ label }
-                                fields={ fieldsToRender }
-                                formOptions={ formOptions }
-                            />
-                        );
-                    })}
+                actualFields.length > 0 && <DataListItem name={ name } key={ key } aria-labelledby="simple-item1">
+                    {actualFields.map(({ fields: fieldsToRender }, fieldsKey) => (
+                        <DataListRow key={ `${key}-${fieldsKey}` }
+                            fieldsKey={ fieldsKey }
+                            label={ label }
+                            fields={ fieldsToRender }
+                            formOptions={ formOptions }
+                        />
+                    ))}
                 </DataListItem>
             );
         })}
