@@ -1,39 +1,38 @@
 // js generates class '.page__{rootClass}' that wraps the content in your page added to the root tag
 // Found in Routes.js as the rootClass
 
+.pref-email .pf-c-data-list {
+    border: 0;
+
+    .pref-c-title {
+        // min and max width, because data lists
+        min-width: 155px;
+        max-width: 155px;
+    }
+    .pf-c-data-list__item:last-of-type { border: 0; }
+}
+
 .pref-email {
-  
+    .pref-email__info-head {
+        font-size: var(--pf-global--FontSize--xl);
+        padding-bottom: 16px;
+    }
+
     .pref-email__info {
-        .pref-email__info-head {
-            font-size: var(--pf-global--FontSize--xl);
-            padding-bottom: 16px;
-        }
-
-        .pf-l-flex > div:first-of-type {
-            margin-left: var(--pf-global--gutter);
-        }
-
-        .pf-c-card__body .pf-l-flex div:first-of-type {
-            margin-right: 111px;
+        .pf-c-card__body .pf-l-flex .pref-email_loader span {
+            margin-left: var(--pf-global--spacer--3xl);
         }
     }
 
-  .pref-email_subheader {
-    margin-top: 8px;
-    font-size: var(--pf-global--FontSize--md);
-    font-weight: var(--pf-global--FontWeight--normal);
-  }
+    .pref-email_form .pf-c-form .pf-c-data-list {
+        .pf-c-data-list__item-row { padding-left: 0; }
+    }
 
-  .pref-u-bold { font-weight: var(--pf-global--FontWeight--bold); }
-  
-  .pf-c-data-list {
-      border: 0;
+    .pref-email_subheader {
+        margin-top: 8px;
+        font-size: var(--pf-global--FontSize--md);
+        font-weight: var(--pf-global--FontWeight--normal);
+    }
 
-      .pref-c-title {
-          // min and max width, because data lists
-          min-width: 155px;
-          max-width: 155px;
-      }
-      .pf-c-data-list__item:last-of-type { border: 0; }
-  }
+    .pref-u-bold { font-weight: var(--pf-global--FontWeight--bold); }
 }

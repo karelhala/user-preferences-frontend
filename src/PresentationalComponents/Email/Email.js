@@ -32,7 +32,7 @@ const getSchema = (app) => {
         fields: [{
             component: LOADER
         }]
-    }] : app?.schema;
+    }] : app.schema;
 };
 
 FormButtons.propTypes = {
@@ -112,7 +112,7 @@ const Email = () => {
                     </StackItem>
                     <StackItem>
                         <Card>
-                            <CardHeader className="pref-email_head">
+                            <CardHeader className="pref-email__info-head">
                                 <div>Email subscriptions</div>
                                 <div className="pref-email_subheader">Select the cloud.redhat.com emails you want to receive.</div>
                             </CardHeader>
@@ -133,7 +133,7 @@ const Email = () => {
                                             sections: Object.entries(email).map(([ key, schema ]) => ({
                                                 label: schema?.title,
                                                 name: key,
-                                                fields: schema.fields || getSchema(store?.[key])
+                                                fields: schema?.fields || getSchema(store?.[key])
                                             }))
                                         }]
                                     } }
