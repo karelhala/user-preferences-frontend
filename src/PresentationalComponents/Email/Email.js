@@ -3,7 +3,19 @@ import './email.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { formFieldsMapper, layoutMapper } from '@data-driven-forms/pf4-component-mapper';
 import { Main, PageHeader, PageHeaderTitle, Skeleton } from '@redhat-cloud-services/frontend-components';
-import { Button, Card, CardBody, Stack, StackItem, Flex, FlexItem, FlexModifiers, CardHeader } from '@patternfly/react-core';
+import {
+    Button,
+    Card,
+    CardBody,
+    Stack,
+    StackItem,
+    Flex,
+    FlexItem,
+    FlexModifiers,
+    CardHeader,
+    TextContent,
+    Text,
+    TextVariants } from '@patternfly/react-core';
 import FormRender from '@data-driven-forms/react-form-renderer';
 import PropTypes from 'prop-types';
 import { DESCRIPTIVE_CHECKBOX, DATA_LIST, LOADER, DescriptiveCheckbox, DataListLayout, Loader } from '../../SmartComponents/FormComponents';
@@ -90,7 +102,11 @@ const Email = () => {
                 <Stack gutter="md">
                     <StackItem>
                         <Card className="pref-email__info">
-                            <CardHeader className="pref-email__info-head">Your information</CardHeader>
+                            <CardHeader className="pref-email__info-head">
+                                <TextContent>
+                                    <Text component={ TextVariants.h2 }>Your information</Text>
+                                </TextContent>
+                            </CardHeader>
                             <CardBody>
                                 <Flex>
                                     <FlexItem
@@ -113,7 +129,9 @@ const Email = () => {
                     <StackItem>
                         <Card>
                             <CardHeader className="pref-email__info-head">
-                                <div>Email subscriptions</div>
+                                <TextContent>
+                                    <Text component={ TextVariants.h2 }>Your information</Text>
+                                </TextContent>
                                 <div className="pref-email_subheader">Select the cloud.redhat.com emails you want to receive.</div>
                             </CardHeader>
                             <CardBody className="pref-email_form">

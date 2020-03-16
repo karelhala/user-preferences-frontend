@@ -1,21 +1,16 @@
 // js generates class '.page__{rootClass}' that wraps the content in your page added to the root tag
 // Found in Routes.js as the rootClass
 
-.pref-email .pf-c-data-list {
-    border: 0;
-
-    .pref-c-title {
-        // min and max width, because data lists
-        min-width: 155px;
-        max-width: 155px;
-    }
-    .pf-c-data-list__item:last-of-type { border: 0; }
-}
-
 .pref-email {
-    .pref-email__info-head {
-        font-size: var(--pf-global--FontSize--xl);
-        padding-bottom: 16px;
+    .pf-c-data-list {
+        border: 0;
+    
+        .pref-c-title {
+            // min and max width, because data lists
+            min-width: 155px;
+            max-width: 155px;
+        }
+        .pf-c-data-list__item:last-of-type { border: 0; }
     }
 
     .pref-email__info {
