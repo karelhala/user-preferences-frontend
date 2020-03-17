@@ -130,7 +130,7 @@ const Email = () => {
                         <Card>
                             <CardHeader className="pref-email__info-head">
                                 <TextContent>
-                                    <Text component={ TextVariants.h2 }>Your information</Text>
+                                    <Text component={ TextVariants.h2 }>Email subscriptions</Text>
                                 </TextContent>
                                 <div className="pref-email_subheader">Select the cloud.redhat.com emails you want to receive.</div>
                             </CardHeader>
