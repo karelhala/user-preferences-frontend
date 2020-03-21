@@ -1,5 +1,6 @@
 // js generates class '.page__{rootClass}' that wraps the content in your page added to the root tag
 // Found in Routes.js as the rootClass
+@import '~@redhat-cloud-services/frontend-components-utilities/files/Utilities/_mixins.scss';
 
 .pref-email {
     .pref-email__subs-info {
@@ -14,7 +15,7 @@
             min-width: 155px;
             max-width: 155px;
 
-            padding-top: var(--pf-global--spacer--lg);
+            @include rem('padding-top', 22px);
         }
         .pf-c-data-list__item:last-of-type { border: 0; }
 
