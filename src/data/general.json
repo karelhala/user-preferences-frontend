@@ -13,8 +13,8 @@
       },
       {
         "component": "text-field",
-        "label": "First name",
-        "name": "first-name"
+        "label": "Last name",
+        "name": "last-name"
       }
     ]
 }]
