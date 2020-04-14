@@ -66,5 +66,12 @@
                 padding-top: var(--pf-global--spacer--lg);
             }
         }
+        .pf-c-data-list .pref-email__info-user-email {
+            padding-left: 0;
+
+            > * {
+                display: block;
+            }
+        }
     }
 }
