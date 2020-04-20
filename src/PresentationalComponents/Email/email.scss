@@ -32,7 +32,13 @@
         }
 
         .pf-c-data-list__item-row { padding-left: 0; }
-        .pref-email__info-user-email { padding-left: 19px;  }
+        .pref-email__info-user-email {
+            padding-left: 19px;
+
+            a {
+                padding-left: var(--pf-global--gutter);
+            }
+        }
     }
 
     .pref-email_subheader {
@@ -71,6 +77,10 @@
 
             > * {
                 display: block;
+            }
+
+            a {
+                padding-left: 0;
             }
         }
     }
