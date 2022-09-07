@@ -38,6 +38,16 @@
             "application": "notifications",
             "resourceType": "notification-preference?bundleName=rhel"
         },
+        "ansible": {
+            "title": "Ansible",
+            "application": "notifications",
+            "resourceType": "notification-preference?bundleName=ansible"
+        },
+        "edge": {
+            "title": "Edge",
+            "application": "notifications",
+            "resourceType": "notification-preference?bundleName=edge"
+        },
         "console": {
             "title": "Console",
             "application": "notifications",
