@@ -1,17 +1,16 @@
-import { mount } from 'enzyme';
-import toJson from 'enzyme-to-json';
 import {
+  calculateEmailConfig,
+  calculatePermissions,
+  concatApps,
+  dispatchMessages,
+  distributeSuccessError,
   getSchema,
   getSection,
-  calculatePermissions,
-  calculateEmailConfig,
-  concatApps,
-  distributeSuccessError,
-  dispatchMessages,
   visibilityFunctions,
 } from './functions';
 import { loaderField } from './constants';
 import { mock } from '../__mock__/schemaLoader';
+import { render } from '@testing-library/react';
 
 describe('getSchema', () => {
   it('should return loader', () => {
@@ -53,8 +52,8 @@ describe('getSection', () => {
 
   it('should return loader', () => {
     const section = getSection();
-    const wrapper = mount(section.label);
-    expect(toJson(wrapper)).toMatchSnapshot();
+    const { container } = render(section.label);
+    expect(container).toMatchSnapshot();
     expect(section).toMatchObject({ fields: loaderField });
   });
 
@@ -131,7 +130,7 @@ describe('calculateEmailConfig', () => {
 
   it('should calculate schema with permissions - false', async () => {
     mock.onGet('/api*').reply(200, {});
-    const result = calculateEmailConfig({
+    const result = await calculateEmailConfig({
       'email-preference': {
         test: {
           permissions: { method: 'something' },
@@ -143,20 +142,21 @@ describe('calculateEmailConfig', () => {
 
   it('should calculate schema with permissions - true', async () => {
     mock.onGet('/api/test/v1/user-config/email-preference').reply(200, {});
-    const result = calculateEmailConfig({
+    const result = await calculateEmailConfig({
       'email-preference': {
         test: {
           permissions: { method: 'something', args: [true] },
         },
       },
     });
-    expect(await result.test.isVisible).toBe(true);
+    const isVisible = await result.test.isVisible;
+    expect(isVisible).toBe(true);
   });
 
-  it('should request localFile', (done) => {
+  it('should request localFile', async () => {
     mock.onGet('/api/test/v1/user-config/email-preference').reply(200, {});
     const dispatch = jest.fn();
-    calculateEmailConfig(
+    await calculateEmailConfig(
       {
         'email-preference': {
           test: {},
@@ -164,20 +164,17 @@ describe('calculateEmailConfig', () => {
       },
       dispatch
     );
-    setImmediate(() => {
-      expect(dispatch).toHaveBeenCalled();
-      expect(dispatch.mock.calls[0][0]).toMatchObject({
-        meta: {
-          appName: 'test',
-        },
-      });
-      done();
+    expect(dispatch).toHaveBeenCalled();
+    expect(dispatch.mock.calls[0][0]).toMatchObject({
+      meta: {
+        appName: 'test',
+      },
     });
   });
 
-  it('should request localFile', (done) => {
+  it('should request localFile', async () => {
     const dispatch = jest.fn();
-    calculateEmailConfig(
+    await calculateEmailConfig(
       {
         'email-preference': {
           test: {
@@ -187,7 +184,7 @@ describe('calculateEmailConfig', () => {
       },
       dispatch
     );
-    setImmediate(() => {
+    setTimeout(() => {
       expect(dispatch).toHaveBeenCalled();
       expect(dispatch.mock.calls[0][0]).toMatchObject({
         payload: {},
@@ -195,7 +192,6 @@ describe('calculateEmailConfig', () => {
           appName: 'test',
         },
       });
-      done();
     });
   });
 });
